@@ -27,7 +27,6 @@ class TodoList:
         if status is None:
             status = 'todo'
 
-        # Добавление задачи
         self.tasks[self.next_id] = self.Task(self.next_id, description, status)
         self.next_id += 1
         return "Task added successfully"
