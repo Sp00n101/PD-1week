@@ -1,25 +1,37 @@
 class InvalidArgumentsCountError(Exception):
-    pass
+    def __init__(self, count):
+        super().__init__(f"INVALID_ARGUMENTS_COUNT: Expected at least 2 arguments, but got {count}.")
+        self.count = count
+
 
 class InvalidArgumentError(Exception):
-    pass
+    def __init__(self, argument):
+        super().__init__(f"INVALID_ARGUMENT: '{argument}' is not a valid number.")
+        self.argument = argument
+
 
 def custom_sum(*args):
-    try:
-        if len(args) < 2:
-            raise InvalidArgumentsCountError("INVALID_ARGUMENTS_COUNT")
+    if len(args) < 2:
+        raise InvalidArgumentsCountError(len(args))
 
-        for arg in args:
-            if not isinstance(arg, (int, float)):
-                raise InvalidArgumentError("INVALID_ARGUMENT")
+    for arg in args:
+        if not isinstance(arg, (int, float)):
+            raise InvalidArgumentError(arg)
 
-        return sum(args)
-
-    except (InvalidArgumentsCountError, InvalidArgumentError) as e:
-        return str(e)
+    return sum(args)
 
 
-print(custom_sum(1, 2, 3))
-print(custom_sum())
-print(custom_sum(0, 1, '1', 2))
+try:
+    print(custom_sum(1, 2, 3))
+except (InvalidArgumentsCountError, InvalidArgumentError) as e:
+    print(e)
 
+try:
+    print(custom_sum(0, 1, '1', 2))
+except (InvalidArgumentsCountError, InvalidArgumentError) as e:
+    print(e)
+
+try:
+    print(custom_sum())
+except (InvalidArgumentsCountError, InvalidArgumentError) as e:
+    print(e)
